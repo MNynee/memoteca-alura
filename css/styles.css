@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -124,12 +126,46 @@ h2, h3 {
   width: 100%;
 }
 
-#pensamento-conteudo, #pensamento-autoria {
+#busca-container {
+  display: flex;
+  align-items: center;
+  margin-top: 56px;
+  width: 100%;
+  max-width: 600px;
+  margin: 56px auto;
+  padding: 0 16px;
+}
+
+#campo-busca {
+  flex: 1;
+  width: 572px;
+  height: 48px;
+  padding: 8px 16px;
+  border-radius: 32px;
+  border: 1px solid #144480;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  outline: none;
+
+  &::placeholder {
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+.lupa {
+  margin-left: -40px;
+  width: 24px;
+  height: 24px;
+}
+
+#pensamento-conteudo, #pensamento-autoria, #pensamento-data {
   padding: 16px;
   border-radius: 8px;
   background: var(--Cinza-claro, #EDF0F4);
   word-wrap: break-word; 
   overflow-wrap: break-word; 
+  font-family: 'Roboto Mono';
 }
 
 #pensamento-conteudo {
@@ -195,21 +231,6 @@ h2, h3 {
   width: 100%;
   max-width: 1200px;
   margin: 40px 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
-
-#lista-vazia {
-  text-align: center;
-  gap: 2rem;
-  margin-top: 2rem;
-
-  & p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 22px;
-  }
 }
 
 #lista-pensamentos-container h3 {
@@ -249,7 +270,7 @@ h2, h3 {
   height: 50px;
 }
 
-.pensamento-conteudo, .pensamento-autoria {
+.pensamento-conteudo, .pensamento-autoria, .pensamento-data {
   margin-left: 20px; 
   color: var(--Cinza, #444);
   font-family: "Roboto Mono";
@@ -272,13 +293,19 @@ h2, h3 {
   font-weight: 600;
 }
 
+.pensamento-data {
+  font-size: 18px;
+  font-weight: 400;
+  text-align: end;
+}
+
 .icones {
   position: absolute;
   bottom: 16px;
   right: 16px;
 }
 
-.botao-editar, .botao-excluir {
+.botao-editar, .botao-excluir, .botao-favorito {
   background: none;
   border: none;
   cursor: pointer;
@@ -286,7 +313,7 @@ h2, h3 {
   margin-left: 8px;
 }
 
-.botao-editar img, .botao-excluir img {
+.botao-editar img, .botao-excluir img, .botao-favorito img {
   width: 20px;
   height: 20px;
 }
@@ -296,4 +323,16 @@ span {
   height: 1px;
   background: #041832;
   margin: 96px 0 48px 0;
+}
+
+#lista-vazia {
+  text-align: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  color: var(--Azul-Dark, #041832);
+
+  & p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+  }
 }
