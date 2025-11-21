@@ -1,15 +1,21 @@
 import api from './api.js'
 
 const ui = {
-    async renderThoughts() {
+    async renderThoughts(filteredThoughts = null) {
         const emptyListMessage = document.getElementById('lista-vazia')
         const thoughtsList = document.getElementById('lista-pensamentos')
         thoughtsList.innerHTML = ''
 
         try {
-            const thoughts = await api.getThoughts()
-            thoughts.forEach(ui.listNewThought);
-            if (thoughts.length === 0) {
+            let thoughtsToRender
+            if (filteredThoughts) {
+                thoughtsToRender = filteredThoughts
+            } else {
+                thoughtsToRender = await api.getThoughts()
+            }
+            
+            thoughtsToRender.forEach(ui.listNewThought);
+            if (thoughtsToRender.length === 0) {
                 emptyListMessage.style.display = 'block'
             } else {
                 emptyListMessage.style.display = 'none'
@@ -43,6 +49,13 @@ const ui = {
         const buttons = document.createElement('div')
         buttons.classList.add('icones')
 
+        const favButton = document.createElement('button')
+        favButton.classList.add('botao-favorito')
+
+        const favIcon = document.createElement('img')
+        favIcon.src = 'assets/imagens/icone-favorito_outline.png'
+        favIcon.alt = 'Favoritar'
+
         const editButton = document.createElement('button')
         editButton.classList.add('botao-editar')
         editButton.onclick = () => {
@@ -70,9 +83,10 @@ const ui = {
         deleteIcon.src = 'assets/imagens/icone-excluir.png'
         deleteIcon.alt = 'Excluir'
 
+        favButton.appendChild(favIcon)
         editButton.appendChild(editIcon)
         deleteButton.appendChild(deleteIcon)
-        buttons.append(editButton, deleteButton)
+        buttons.append(favButton, editButton, deleteButton)
 
         li.append(imgQuote, thoughtContent, thoughtAuthor, buttons)
         thoughtsList.appendChild(li)

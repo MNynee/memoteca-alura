@@ -53,6 +53,22 @@ const api = {
             alert('Erro ao excluir pensamento!')
             
         }
+    },
+
+    async getThoughtsByTerm(term) {
+        const thoughts = await this.getThoughts()
+        const termLowerCase = term.toLowerCase()
+
+        try {
+            const filteredThoughts = thoughts.filter(thought => {
+                return (thought.conteudo.toLowerCase().includes(termLowerCase) || thought.autoria.toLowerCase().includes(termLowerCase))
+            })
+            return filteredThoughts
+            
+        } catch (error) {
+            alert('Erro ao filtrar pensamentos!')
+            throw error
+        }
     }
 }
 

@@ -6,8 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const thoughtForm = document.getElementById('pensamento-form')
     const cancelBtn = document.getElementById('botao-cancelar')
+    const searchInput = document.getElementById('campo-busca')
     thoughtForm.addEventListener('submit', submitThought)
     cancelBtn.addEventListener('click', ui.clearForm)
+    searchInput.addEventListener('input', handleSearch)
 });
 
 async function submitThought(event) {
@@ -28,5 +30,17 @@ async function submitThought(event) {
 
     } catch {
         alert('Erro ao enviar pensamento!')
+    }
+}
+
+async function handleSearch() {
+    const searchTerm = document.getElementById('campo-busca').value
+    
+    try {
+        const filteredThoughts = await api.getThoughtsByTerm(searchTerm)
+        ui.renderThoughts(filteredThoughts)
+    } catch (error) {
+        alert('Erro ao buscar pensamentos!')
+        throw error
     }
 }
