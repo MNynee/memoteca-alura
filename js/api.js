@@ -1,10 +1,22 @@
 const URL_BASE = 'http://localhost:3000';
 
+const convertStringtoDate = (dateString) => {
+    const [year, month, day] = dateString.split('-')
+    return new Date(Date.UTC(year, month - 1, day))
+}
+
 const api = {
     async getThoughts() {
         try {
             const response = await axios.get(`${URL_BASE}/pensamentos`)
-            return await response.data
+            const thoughts = await response.data
+
+            return thoughts.map(thought => {
+                return {
+                    ...thought,
+                    data: new Date(thought.data)
+                }
+            })
 
         } catch {
             alert('Erro ao buscar pensamentos!')
@@ -14,7 +26,11 @@ const api = {
 
     async addNewThought(thought) {
         try {
-            const response = await axios.post(`${URL_BASE}/pensamentos`, thought)
+            const data = convertStringtoDate(thought.data)
+            const response = await axios.post(`${URL_BASE}/pensamentos`, {
+                ...thought,
+                data: data.toISOString()
+            })
             return await response.data
 
         } catch {
@@ -26,7 +42,12 @@ const api = {
     async getThoughtById(id) {
         try {
             const response = await axios.get(`${URL_BASE}/pensamentos/${id}`)
-            return await response.data
+            const thought = await response.data
+
+            return {
+                ...thought,
+                data: new Date(thought.data)
+            }
 
         } catch {
             alert('Erro ao buscar pensamento!')
@@ -67,6 +88,16 @@ const api = {
             
         } catch (error) {
             alert('Erro ao filtrar pensamentos!')
+            throw error
+        }
+    },
+
+    async updateFavorite(id, favorite) {
+        try {
+            const response = await axios.patch(`${URL_BASE}/pensamentos/${id}`, { favorito: favorite })
+            return await response.data
+        } catch (error) {
+            alert('Erro ao atualizar favorito!')
             throw error
         }
     }

@@ -14,15 +14,17 @@ const ui = {
                 thoughtsToRender = await api.getThoughts()
             }
             
-            thoughtsToRender.forEach(ui.listNewThought);
+            thoughtsToRender.forEach(ui.listNewThought)
+
             if (thoughtsToRender.length === 0) {
                 emptyListMessage.style.display = 'block'
             } else {
                 emptyListMessage.style.display = 'none'
             }
 
-        } catch {
+        } catch (error) {
             alert('Erro ao renderizar pensamentos!')
+            throw error
         }
     },
 
@@ -45,22 +47,42 @@ const ui = {
         const thoughtAuthor = document.createElement('div')
         thoughtAuthor.classList.add('pensamento-autoria')
         thoughtAuthor.textContent = thought.autoria
+        
+        const thoughtDate = document.createElement('div')
+        const formattedDate = thought.data.toLocaleDateString('pt-BR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+            timezone: 'UTC'
+        })
+        const regexDate = formattedDate.replace(/^(\w)/, (match) => match.toUpperCase())
+        thoughtDate.classList.add('pensamento-data')
+        thoughtDate.textContent = regexDate
 
         const buttons = document.createElement('div')
         buttons.classList.add('icones')
 
         const favButton = document.createElement('button')
         favButton.classList.add('botao-favorito')
+        favButton.onclick = async () => {
+            try {
+                await api.updateFavorite(thought.id, !thought.favorito)
+                ui.renderThoughts()
+            } catch (error) {
+                alert('Erro ao favoritar pensamento!')
+                throw error
+            }
+        }
 
         const favIcon = document.createElement('img')
-        favIcon.src = 'assets/imagens/icone-favorito_outline.png'
+        favIcon.src = thought.favorito ? 'assets/imagens/icone-favorito.png' : 'assets/imagens/icone-favorito_outline.png'
         favIcon.alt = 'Favoritar'
 
         const editButton = document.createElement('button')
         editButton.classList.add('botao-editar')
         editButton.onclick = () => {
             ui.fillForm(thought.id)
-            document.getElementById('pensamento-conteudo').focus()
         }
 
         const editIcon = document.createElement('img')
@@ -88,7 +110,7 @@ const ui = {
         deleteButton.appendChild(deleteIcon)
         buttons.append(favButton, editButton, deleteButton)
 
-        li.append(imgQuote, thoughtContent, thoughtAuthor, buttons)
+        li.append(imgQuote, thoughtContent, thoughtAuthor, thoughtDate, buttons)
         thoughtsList.appendChild(li)
     },
 
@@ -101,6 +123,8 @@ const ui = {
         document.getElementById('pensamento-id').value = thought.id
         document.getElementById('pensamento-conteudo').value = thought.conteudo
         document.getElementById('pensamento-autoria').value = thought.autoria
+        document.getElementById('pensamento-data').value = thought.data.toISOString().split('T')[0]
+        document.getElementById('form-container').scrollIntoView({ behavior: 'smooth' });
     }
 
 }
