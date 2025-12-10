@@ -45,7 +45,3 @@ npm start
 Acesse o backend localmente em seu navegador:
 
 http://localhost:3000
-
-## 💬 Comentários
-
-Na branch main as requisições são feitas através do `fetch`. Na branch axios, são feitas pelo `axios`.
